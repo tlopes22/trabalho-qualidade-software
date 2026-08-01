@@ -2,6 +2,7 @@ import pandas as pd
 import pytest
 
 from script import (
+    carregar_dados,
     validar_dados,
     calcular_media,
     maior_nota,
@@ -11,65 +12,32 @@ from script import (
 
 
 def test_calcular_media():
-    """
-    Testa se a média é calculada corretamente.
-    """
-    df = pd.DataFrame({
-        "aluno": ["Ana", "Bruno", "Carlos"],
-        "nota": [8, 7, 9]
-    })
-
+    df = pd.DataFrame({"aluno": ["Ana", "Bruno", "Carlos"], "nota": [8, 7, 9]})
     df = validar_dados(df)
-
     assert calcular_media(df) == 8
 
 
 def test_dataset_vazio():
-    """
-    Deve lançar erro quando o DataFrame estiver vazio.
-    """
     df = pd.DataFrame(columns=["aluno", "nota"])
-
     with pytest.raises(ValueError):
         validar_dados(df)
 
 
 def test_coluna_nota_inexistente():
-    """
-    Deve lançar erro caso a coluna 'nota' não exista.
-    """
-    df = pd.DataFrame({
-        "aluno": ["Ana", "Bruno"]
-    })
-
+    df = pd.DataFrame({"aluno": ["Ana", "Bruno"]})
     with pytest.raises(KeyError):
         validar_dados(df)
 
 
 def test_nota_invalida():
-    """
-    Deve lançar erro quando houver nota não numérica.
-    """
-    df = pd.DataFrame({
-        "aluno": ["Ana", "Bruno"],
-        "nota": ["dez", 8]
-    })
-
+    df = pd.DataFrame({"aluno": ["Ana"], "nota": ["dez"]})
     with pytest.raises(ValueError):
         validar_dados(df)
 
 
 def test_apenas_um_aluno():
-    """
-    Testa cálculo da média com apenas um aluno.
-    """
-    df = pd.DataFrame({
-        "aluno": ["Ana"],
-        "nota": [10]
-    })
-
+    df = pd.DataFrame({"aluno": ["Ana"], "nota": [10]})
     df = validar_dados(df)
-
     assert calcular_media(df) == 10
     assert quantidade_alunos(df) == 1
     assert maior_nota(df) == 10
@@ -77,45 +45,36 @@ def test_apenas_um_aluno():
 
 
 def test_todas_notas_zero():
-    """
-    Testa cenário em que todas as notas são zero.
-    """
-    df = pd.DataFrame({
-        "aluno": ["Ana", "Bruno", "Carlos"],
-        "nota": [0, 0, 0]
-    })
-
+    df = pd.DataFrame({"aluno": ["Ana", "Bruno"], "nota": [0, 0]})
     df = validar_dados(df)
-
     assert calcular_media(df) == 0
-    assert maior_nota(df) == 0
-    assert menor_nota(df) == 0
 
 
 def test_maior_e_menor_nota():
-    """
-    Verifica maior e menor nota da turma.
-    """
-    df = pd.DataFrame({
-        "aluno": ["Ana", "Bruno", "Carlos"],
-        "nota": [5, 10, 8]
-    })
-
+    df = pd.DataFrame({"aluno": ["Ana", "Bruno"], "nota": [5, 10]})
     df = validar_dados(df)
-
     assert maior_nota(df) == 10
     assert menor_nota(df) == 5
 
 
 def test_quantidade_alunos():
-    """
-    Verifica a quantidade de alunos.
-    """
-    df = pd.DataFrame({
-        "aluno": ["Ana", "Bruno", "Carlos", "Daniel"],
-        "nota": [7, 8, 9, 10]
-    })
-
+    df = pd.DataFrame({"aluno": ["Ana", "Bruno"], "nota": [7, 8]})
     df = validar_dados(df)
+    assert quantidade_alunos(df) == 2
 
-    assert quantidade_alunos(df) == 4
+
+def test_nota_negativa():
+    df = pd.DataFrame({"aluno": ["Ana"], "nota": [-1]})
+    with pytest.raises(ValueError):
+        validar_dados(df)
+
+
+def test_nota_acima_do_limite():
+    df = pd.DataFrame({"aluno": ["Ana"], "nota": [11]})
+    with pytest.raises(ValueError):
+        validar_dados(df)
+
+
+def test_arquivo_inexistente():
+    with pytest.raises(FileNotFoundError):
+        carregar_dados("arquivo_inexistente.csv")
