@@ -20,6 +20,7 @@ Trabalho-QualidadeSoftware/
 ├── notas.csv
 ├── requirements.txt
 ├── README.md
+├── .gitignore
 └── relatorio.pdf
 ```
 
@@ -37,7 +38,7 @@ Execute o programa:
 python script.py
 ```
 
-Execute os testes:
+Execute os testes automatizados:
 
 ```bash
 pytest
@@ -48,19 +49,28 @@ pytest
 - Leitura de arquivo CSV
 - Validação dos dados
 - Cálculo da média da turma
-- Maior nota
-- Menor nota
-- Quantidade de alunos
+- Identificação da maior nota
+- Identificação da menor nota
+- Contagem de alunos
 
-## Casos de teste
+## Casos de teste implementados
 
-Foram implementados testes para:
+Foram desenvolvidos testes automatizados utilizando pytest para validar diferentes cenários:
 
-- Média correta
-- Dataset vazio
-- Coluna "nota" inexistente
-- Nota inválida
-- Apenas um aluno
-- Todas as notas iguais a zero
-- Maior e menor nota
-- Quantidade de alunos
+- Cálculo correto da média com notas válidas;
+- Dataset vazio;
+- Ausência da coluna obrigatória "nota";
+- Valores de nota inválidos;
+- Apenas um aluno no dataset;
+- Todas as notas iguais a zero;
+- Identificação da maior e menor nota;
+- Quantidade de alunos processados;
+- Arquivo inexistente;
+- Notas negativas;
+- Notas acima do limite permitido.
+
+## Melhorias realizadas a partir dos testes
+
+Durante a criação dos testes automatizados foram identificados novos cenários de validação necessários para aumentar a confiabilidade do processamento. Foram adicionadas validações para impedir notas fora do intervalo permitido (0 a 10), além de melhorias no tratamento de erros relacionados à leitura dos arquivos.
+
+Essas alterações demonstram como os testes contribuem para a identificação preventiva de problemas e para a melhoria da qualidade do software.
